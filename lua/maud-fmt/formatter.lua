@@ -116,25 +116,7 @@ function M.format()
 			end
 		end
 
-		-- Detect text content expressions
-		local is_text_content = trimmed:match("^%([%w_]+%)$") ~= nil
-
-		-- Calculate indentation level
-		local extra_indent = 0
-		if is_text_content then
-			extra_indent = 1
-		end
-
-		-- Special case for functions like (css())
-		if trimmed:match("^%(css%(%)|js%(%)%)$") then
-			extra_indent = 0
-			table.insert(result, base_indent .. string.rep(" ", indent_size) .. trimmed)
-		-- Special handling for link and other HTML elements with attributes
-		elseif trimmed:match("^link%s+") or trimmed:match("^meta%s+") then
-			table.insert(result, base_indent .. string.rep(" ", indent_size * indent_level) .. trimmed)
-		else
-			table.insert(result, base_indent .. string.rep(" ", indent_size * (indent_level + extra_indent)) .. trimmed)
-		end
+		table.insert(result, base_indent .. string.rep(" ", indent_size * indent_level) .. trimmed)
 
 		-- Update indent level for the next line
 		if trimmed:match("{%s*$") and not trimmed:match("{}%s*$") then
